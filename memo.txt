@@ -1,0 +1,30 @@
+Memorandum
+
+Date: 1/18/2019
+To: Boss
+From: Cameron Bale
+Subject: Monte Carlo Cereal Purchase Simulation
+
+The purpose of this memo is to inform you of the Monte Carlo simulation that I've performed on the purchasing patterns 
+customers will need to exhibit in order to obtain all of the toys that we will be including in our upcoming promotions. 
+I've calculated the results for two scenarios:
+
+1. The toys are placed in boxes with equal probability.
+
+2. The toys (1 through 4) are placed in the boxes with corresponding probabilities 0.10, 0.25, 0.25, 0.40.
+
+I simulated how many boxes a given customer would have to purchase in order to collect one of each toy, and did that 
+10,000 times. We can assume that the statistics generated from this simulation will be approximately equal to the actual
+statistics for our real life customers.
+
+If the toys are placed in boxes with equal probability, customers will have to purchase an average of 8.3 boxes of 
+cereal to get at least one of each toy. The true average number of boxes likely is contained in the interval 8.25 - 8.4.
+The proportion of customers who will have to purchase at least 14 boxes to obtain at least one of each toy is .095. The
+true proportion likely is contained in the interval .089 - .101.
+
+If the toys are placed according to scenario 2, customers will have to purchase an average of 12.07 boxes of 
+cereal to get at least one of each toy. The true average number of boxes likely is contained in the interval 11.9 - 12.23.
+The proportion of customers who will have to purchase at least 14 boxes to obtain at least one of each toy is .29. The
+true proportion likely is contained in the interval .28 - .298.
+
+I hope that this information is useful and can inform your decisions as you move forward with the promotion.

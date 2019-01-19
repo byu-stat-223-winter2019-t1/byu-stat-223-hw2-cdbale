@@ -1,0 +1,82 @@
+---
+title: "Birthday"
+author: "Cameron Bale"
+date: "1/19/2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load library.
+```{r}
+#install.packages('tidyverse')
+library(tidyverse)
+```
+
+Create a function, 'birthday', which reports the monte carlo simulatation estimated probability of
+having a shared birthday in 'n' people. You can specify how many repetitions you want in the
+simulation using the 'n_reps' argument (default is 1000).
+```{r}
+birthday <- function (n, n_reps = 1000) {
+  # create emply duplicate vector
+  num_dups <- 0
+  # sample 'n_reps' times, each time noting duplication in 'num_dups'
+  for (i in 1:n_reps) {
+    
+    b_days <- sample(1:365, n, replace = TRUE)
+    
+    if (length(b_days) != length(unique(b_days))) {
+      
+      num_dups <- num_dups + 1
+      
+    }
+    
+  }
+  # get probability of shared birthday from all 'n_reps' simulations
+  avg_dups <- num_dups / n_reps
+  # create confidence interval for the probability
+  prob_ci <- avg_dups + c(-1, 1) * qnorm(0.975) * sqrt(avg_dups * (1 - avg_dups)/n_reps)
+  
+  stats <- append(avg_dups, prob_ci)
+  
+  names(stats) <- c('Prob. of Shared B-Day', 'Lower Bound', 'Upper Bound')
+  
+  return(stats)
+  
+}  
+```
+
+```{r}
+birthday(23, 1000)
+```
+
+Plotting monte carlo probability and true probability.
+```{r}
+n <- 1:80
+# using a taylor series approximation of probability of sharing a birthday
+true_prob_approx <- sapply(n, function (x) 1 - exp(-x * (x - 1) / 730))
+# store monte carlo estimates for 1 to 80 people
+mc_estimates <- lapply(n, birthday)
+# store means and confidence interval bounds
+mc_means <- sapply(n, function (x) mc_estimates[[x]][[1]])
+mc_lower <- sapply(n, function (x) mc_estimates[[x]][[2]])
+mc_upper <- sapply(n, function (x) mc_estimates[[x]][[3]])
+# bring data together into one dataframe
+graph_data <- tibble('True' = true_prob_approx,
+                     'Mean' = mc_means,
+                     'Lower' = mc_lower,
+                     'Upper' = mc_upper,
+                     'x' = n)
+# graph data
+graph_data %>%
+  ggplot(aes(x = n, y = True)) +
+  geom_line(color = 'red') +
+  geom_line(aes(x = x, y = Mean)) +
+  geom_line(aes(x = x, y = Lower), linetype = 2) +
+  geom_line(aes(x = x, y = Upper), linetype = 2) +
+  labs(x = 'Number of People',
+       y = 'Prob. of a Shared B-Day',
+       title = 'Graphical Representation of B-Day Problem')
+```
